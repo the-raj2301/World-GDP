@@ -12,9 +12,9 @@ public class CountryLanguageRowMapper implements RowMapper<CountryLanguage>{
 	@Override
 	public CountryLanguage mapRow(ResultSet rs, int rowNum) throws SQLException {
 		CountryLanguage countryLanguage = new CountryLanguage();
-		countryLanguage.setCountryCode(rs.getString("country_code"));
+		countryLanguage.setCountryCode(rs.getString("countrycode"));
 		countryLanguage.setLanguage(rs.getString("language"));
-		countryLanguage.setIsOfficial(rs.getString("is_official"));
+		countryLanguage.setIsOfficial(rs.getString("isofficial"));
 		countryLanguage.setPercentage(rs.getDouble("percentage"));
 		return countryLanguage;
 	}
