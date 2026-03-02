@@ -9,5 +9,5 @@ public class CountryLanguage {
 	private String Language;
 	private String isOfficial;
 	private Double percentage;
-	
+
 }

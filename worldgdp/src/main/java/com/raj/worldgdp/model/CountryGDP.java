@@ -6,5 +6,5 @@ import lombok.Data;
 public class CountryGDP {
 	private Short year;
 	private Double value;
-	
+
 }

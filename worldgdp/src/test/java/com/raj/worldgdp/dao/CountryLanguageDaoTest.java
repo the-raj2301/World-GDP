@@ -19,7 +19,7 @@ import com.raj.worldgdp.model.CountryLanguage;
 
 @Transactional
 @ExtendWith(SpringExtension.class)
-@SpringJUnitConfig(classes = { TestDBConfiguration.class, SpringJUnitConfig.class })
+@SpringJUnitConfig(classes = TestDBConfiguration.class)
 class CountryLanguageDaoTest {
 
 	@Autowired
@@ -55,19 +55,19 @@ class CountryLanguageDaoTest {
 		countryLanguageDao.addLanguage(code, cl);
 		assertThat(countryLanguageDao.languageExist(code, cl.getLanguage())).isTrue();
 	}
-	
+
 	@Test
 	public void testDeleteLanguage() {
 		String code = "IND";
-		
+
 		CountryLanguage language = createLanguage(code);
 		countryLanguageDao.addLanguage(code, language);
-		
+
 		boolean languageExist = countryLanguageDao.languageExist(code, language.getLanguage());
 		assertThat(languageExist).isTrue();
-		
+
 		countryLanguageDao.deleteLanguage(code, language.getLanguage());
-		
+
 		assertThat(countryLanguageDao.languageExist(code, language.getLanguage())).isFalse();
 		}
 

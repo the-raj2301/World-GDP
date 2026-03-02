@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -17,14 +16,14 @@ import lombok.Setter;
 @Service
 @Setter
 public class CountryLanguageDao {
-	
+
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	
+
 	private static final Integer PAGE_SIZE = 10;
-	
+
 	public List<CountryLanguage> getCountryLanguage(String countryCode, Integer pageNo){
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params.put("code", countryCode);
 		Integer offset = (pageNo - 1) * PAGE_SIZE;
 		params.put("offset", offset);
@@ -36,9 +35,9 @@ public class CountryLanguageDao {
 				+ " LIMIT :size OFFSET :offset "
 				, params, new CountryLanguageRowMapper());
 	}
-	
+
 	public boolean languageExist(String countryCode, String language) {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params.put("code", countryCode);
 		params.put("language", language);
 		Integer rowCount = namedParameterJdbcTemplate.queryForObject(
@@ -48,22 +47,22 @@ public class CountryLanguageDao {
 				, params, Integer.class);
 		return rowCount > 0;
 	}
-	
+
 	public void addLanguage(String countryCode, CountryLanguage countryLanguage) {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params.put("code", countryCode);
 		params.put("language", countryLanguage.getLanguage());
 		params.put("isOfficial", countryLanguage.getIsOfficial());
 		params.put("percentage", countryLanguage.getPercentage());
-		
+
 		namedParameterJdbcTemplate.update(
 				"INSERT INTO countrylanguage (countrycode, language, isofficial, percentage) "
 				+ " VALUES ( :code, :language, :isOfficial, :percentage) "
 				, params);
 	}
-	
+
 	public void deleteLanguage(String countryCode, String language) {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params.put("code", countryCode);
 		params.put("language", language);
 		namedParameterJdbcTemplate.update(

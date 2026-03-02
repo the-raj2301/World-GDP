@@ -18,7 +18,7 @@ public class CountryRowMapper implements RowMapper<Country>{
 		country.setContinent(rs.getString("continent"));
 		country.setRegion(rs.getString("region"));
 		country.setSurfaceArea(rs.getDouble("surface_area"));
-		country.setIndepYear(rs.getShort("indep_year"));
+		country.setIndepYear(rs.getObject("indep_year", Short.class));
 		country.setPopulation(rs.getLong("population"));
 		country.setLifeExpectancy(rs.getDouble("life_expectancy"));
 		country.setGnp(rs.getDouble("gnp"));
@@ -32,12 +32,12 @@ public class CountryRowMapper implements RowMapper<Country>{
 			city.setName(rs.getString("capital_name"));
 			country.setCapital(city);
 		}
-		
+
 		country.setCode2(rs.getString("code2"));
-		
+
 		return country;
 	}
-	
-	
+
+
 
 }

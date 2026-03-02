@@ -1,17 +1,16 @@
 package com.raj.worldgdp;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
-	protected Class<?> @Nullable [] getRootConfigClasses() {
+	protected Class<?> [] getRootConfigClasses() {
 		return new Class[] {AppConfiguration.class};
 	}
 
 	@Override
-	protected Class<?> @Nullable [] getServletConfigClasses() {
+	protected Class<?> [] getServletConfigClasses() {
 		return new Class[] {AppConfiguration.class};
 	}
 

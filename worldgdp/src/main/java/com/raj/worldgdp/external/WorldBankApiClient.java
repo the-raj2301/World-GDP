@@ -17,30 +17,30 @@ import com.raj.worldgdp.model.CountryGDP;
 public class WorldBankApiClient {
 	String GDP_URL = "http://api.worldbank.org/v2/countries/%s/indicators/SP.POP.TOTL?"
 			+ "format=json&date=2015:2025";
-	
+
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final ObjectMapper mapper = new ObjectMapper();
-	
+
 	public List<CountryGDP> getGDP(String countryCode) throws JsonMappingException, JsonProcessingException {
-		
+
 		ResponseEntity<String> response = restTemplate.getForEntity(String.format(GDP_URL, countryCode), String.class);
-		
+
 		JsonNode tree = mapper.readTree(response.getBody()).get(1);
-		
-		List<CountryGDP> data = new ArrayList<CountryGDP>();
-		
+
+		List<CountryGDP> data = new ArrayList<>();
+
 		for (JsonNode node : tree) {
-			
+
 			CountryGDP countryGDP = new CountryGDP();
-			
+
 			if (!node.get("value").isNull()) {
 				countryGDP.setValue(node.get("value").asDouble());
 			}
-			
+
 			countryGDP.setYear(Short.valueOf(node.get("data").asText()));
 			data.add(countryGDP);
 		}
-		
+
 		return data;
 	}
 }

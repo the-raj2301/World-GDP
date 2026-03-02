@@ -11,7 +11,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 public class DBConfiguration {
-	
+
 	@Value("${jdbcUrl}")
 	private String url;
 	@Value("${dataSource.username}")
@@ -20,24 +20,24 @@ public class DBConfiguration {
 	private String password;
 	@Value("${dataSourceClassName}")
 	private String driver;
-	
+
 	@Bean
 	public DataSource dataSource() {
 		HikariDataSource ds = new HikariDataSource();
-		
+
 		ds.setJdbcUrl(url);
-		ds.setJdbcUrl(username);
-		ds.setJdbcUrl(password);
+		ds.setUsername(username);
+		ds.setPassword(password);
 		ds.setDriverClassName(driver);
-		
+
 		return ds;
-		
+
 	}
-	
+
 	@Bean
 	public NamedParameterJdbcTemplate jdbcTemplate() {
 		return new NamedParameterJdbcTemplate(dataSource());
 	}
-	
+
 
 }

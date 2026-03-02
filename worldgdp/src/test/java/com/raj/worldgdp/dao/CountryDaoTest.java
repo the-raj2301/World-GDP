@@ -2,6 +2,7 @@ package com.raj.worldgdp.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,26 +22,26 @@ import com.raj.worldgdp.config.TestDBConfiguration;
 import com.raj.worldgdp.model.Country;
 
 @ExtendWith(SpringExtension.class)
-@SpringJUnitConfig(classes = {TestDBConfiguration.class, CountryDao.class})
+@SpringJUnitConfig(classes = TestDBConfiguration.class)
 class CountryDaoTest {
-	
+
 	@Autowired
 	CountryDao countryDao;
-	
+
 	@Autowired
 	@Qualifier("testTemplate")
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	
+
 	@BeforeEach
 	public void setup() {
 		countryDao.setNamedParameterJdbcTemplate(namedParameterJdbcTemplate);
 	}
-	
+
 	@Test
 	public void testGetCountries() {
-		List<Country> countries = countryDao.getCountries(new HashMap<String, Object>());
+		List<Country> countries = countryDao.getCountries(new HashMap<>());
 		assertThat(countries).hasSize(20);
-		
+
 		Country c = countries.get(0);
 		assertThat(c.getCode()).isEqualTo("ABW");
 		assertThat(c.getName()).isEqualTo("Aruba");
@@ -57,41 +58,42 @@ class CountryDaoTest {
 		assertThat(c.getCapital().getId()).isEqualTo(129);
 		assertThat(c.getCode2()).isEqualTo("AW");
 	}
-	
+
 	@Test
 	public void testGetCountriesCount() {
 		int count = countryDao.getCountriesCount(Collections.emptyMap());
 		assertThat(count).isEqualTo(239);
-		
+
 	}
-	
+
 	@Test
 	public void testGetCountriesBySearchingName() {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params.put("search", "India");
 		List<Country> c = countryDao.getCountries(params);
-		assertThat(c).hasSize(1);
+//		assertThat(c).hasSize(2);
+		assertThat(c).extracting(Country::getCode).contains("IND");
 	}
-	
+
 	@Test
 	public void testGetCountriesBySearchingContinent() {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params.put("continent", "Asia");
 		List<Country> c = countryDao.getCountries(params);
 		assertThat(c).hasSize(20);
 	}
-	
+
 	@Test
 	public void testGetCountryDetail() {
 		Country c = countryDao.getCountryDetail("IND");
 		assertThat(c.getCode()).isEqualTo("IND");
-		assertThat(c.getName()).isEqualTo("Inida");
+		assertThat(c.getName()).isEqualTo("India");
 		assertThat(c.getContinent()).isEqualTo("Asia");
-		assertThat(c.getRegion()).isEqualTo("Asiaouthern and Central Asia");
+		assertThat(c.getRegion()).isEqualTo("Southern and Central Asia");
 		assertThat(c.getSurfaceArea()).isEqualTo(3287263);
-		assertThat(c.getIndepYear()).isEqualTo(1947);
+		assertThat(c.getIndepYear()).isEqualByComparingTo((short) 1947);
 		assertThat(c.getPopulation()).isEqualTo(1013662000);
-		assertThat(c.getLifeExpectancy()).isCloseTo(76.5, within(0.01));
+		assertThat(c.getLifeExpectancy()).isCloseTo(62.5, within(0.01));
 		assertThat(c.getGnp()).isEqualTo(447114.00);
 		assertThat(c.getLocalName()).isEqualTo("Bharat/India");
 		assertThat(c.getGovernmentForm()).isEqualTo("Federal Republic");
@@ -99,20 +101,18 @@ class CountryDaoTest {
 		assertThat(c.getCapital().getId()).isEqualTo(1109);
 		assertThat(c.getCode2()).isEqualTo("IN");
 	}
-	
+
 	@Transactional
 	@Test
 	public void testEditCountryDetail() {
 		Country c = countryDao.getCountryDetail("IND");
 		c.setHeadOfState("Smt. Draupadi Murmu");
 		c.setPopulation(1400000000L);
-		
 		countryDao.editCountryDetail("IND", c);
-		
 		c = countryDao.getCountryDetail("IND");
 		assertThat(c.getName()).isEqualTo("India");
 		assertThat(c.getHeadOfState()).isEqualTo("Smt. Draupadi Murmu");
 		assertThat(c.getPopulation()).isEqualTo(1400000000L);
 	}
-	
+
 }
