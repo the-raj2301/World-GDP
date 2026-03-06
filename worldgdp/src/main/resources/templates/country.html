@@ -1,0 +1,159 @@
+
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base :: layout(~{::section})}">
+
+<section class="container">
+
+	<!--------------- Display -------------->
+
+	<div class="d-flex justify-content-between my-2 align-items-center">
+		<h1 class="display-5 fw-bolder"
+			th:text="|${country.name} ( ${country.code} / ${country.code2} )|"></h1>
+		<a class="btn btn-primary" href="#" role="button">Edit Details</a>
+	</div>
+
+	<!--------------- Flag Section -------------->
+
+	<div class="row align-items-center py-2">
+
+		<!------ Flag ----->
+
+		<div class="col-md-4">
+			<img class="shadow img-fluid" style="max-width: 300px"
+				th:src="@{'https://flagcdn.com/' + ${#strings.toLowerCase(country.code2)} + '.svg'}">
+		</div>
+
+		<!------ Left Info ----->
+
+		<div class="col-md-4 px-4 gap-3">
+			<table class="table table-borderless align-middle">
+				<tbody class="table-group-divider">
+					<tr>
+						<th class="text-muted">Capital</th>
+						<td th:if="${capital.name != null}" th:text="${capital.name}"></td>
+					</tr>
+					<tr>
+						<th class="text-muted">Continent</th>
+						<td th:text="${country.continent}"></td>
+					</tr>
+					<tr>
+						<th class="text-muted">Region</th>
+						<td th:text="${country.region}"></td>
+					</tr>
+					<tr>
+						<th class="text-muted">Head Of State</th>
+						<td th:text="${country.headOfState}"></td>
+					</tr>
+					<tr>
+						<th class="text-muted">Government</th>
+						<td th:text="${country.governmentForm}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!------ Right Info ----->
+
+		<div class="col-md-4">
+			<table class="table table-borderless align-middle">
+				<tbody class="table-group-divider">
+					<tr>
+						<th class="text-muted">Local Name</th>
+						<td th:text="${country.localName}"></td>
+					</tr>
+					<tr>
+						<th class="text-muted">Independence</th>
+						<td th:text="${country.indepYear}"></td>
+					</tr>
+					<tr>
+						<th class="text-muted">Surface Area</th>
+						<td th:text="${country.surfaceArea}"></td>
+					</tr>
+					<tr>
+						<th class="text-muted">Population</th>
+						<td th:text="${country.population}"></td>
+					</tr>
+					<tr>
+						<th class="text-muted">Life Expectancy</th>
+						<td th:text="${country.lifeExpectancy}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!--------------- Cities Info -------------->
+
+	<div class="row">
+		<div class="col-md-3">
+			<ol class="list-group">
+				<li th:each="city: ${cities}" class="list-group-item">
+					<p class="mb-1 fs-4 fw-bold" th:text="${city.name}">City</p>
+					<div class="d-flex justify-content-between align-items-center">
+						<div class="d-flex gap-3">
+							<small class="text-muted" th:text="${city.district}">District</small>
+							<small class="text-muted">/</small> <small class="text-muted"
+								th:text="${city.population}">District</small>
+						</div>
+						<a class="mb-2 btn btn-sm btn-outline-danger" title="Delete City"><i
+							class="bi bi-trash3"></i></a>
+					</div>
+				</li>
+			</ol>
+
+			<!-------- Pagination ----------->
+
+			<nav aria-label="Page navigation">
+				<ul class="pagination mt-2 justify-content-center">
+					<li class="page-item"><a class="page-link" href="#"
+						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+					</a></li>
+					<li class="page-item"><a class="page-link" href="#">1</a></li>
+					<li class="page-item"><a class="page-link" href="#">2</a></li>
+					<li class="page-item"><a class="page-link" href="#">3</a></li>
+					<li class="page-item"><a class="page-link" href="#"
+						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+					</a></li>
+				</ul>
+			</nav>
+
+		</div>
+
+
+		<!--------------- Languages Info -------------->
+
+		<div class="col-md-3">
+			<ol class="list-group">
+				<li th:each="language: ${languages}" class="list-group-item">
+					<p class="mb-1 fs-4 fw-bold" th:text="${language.language}">Language</p>
+					<div class="d-flex justify-content-between align-items-center">
+						<div class="d-flex gap-3">
+							<small class="text-muted" th:text="${language.isOfficial}">IsOfficial</small>
+							<small class="text-muted">/</small> <small class="text-muted"
+								th:text="${language.percentage}">Percentage</small>
+						</div>
+						<a class="mb-2 btn btn-sm btn-outline-danger"
+							title="Delete Language"><i class="bi bi-trash3"></i></a>
+					</div>
+				</li>
+			</ol>
+		</div>
+
+		<!--------------- GDP Info -------------->
+
+		<ol class="list-group col-md-6">
+			<li class="list-group-item">
+
+				<div class="fw-bold mb-3">GDP Growth</div> 
+				
+				<!-- Chart Container -->
+				
+				<div id="gdpChart" style="width: 100%; height: 300px;"></div>
+
+			</li>
+		</ol>
+	</div>
+
+</section>
+</html>

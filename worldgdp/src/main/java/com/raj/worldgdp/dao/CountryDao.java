@@ -85,6 +85,7 @@ public class CountryDao {
 		return namedParameterJdbcTemplate.queryForObject(
 				"SELECT COUNT(*) FROM Country c "
 				+ " WHERE 1 =1 "
+				+ (StringUtils.hasText((String)params.get("search")) ? SEARCH_WHERE_CLAUSE : "")
 				+ (StringUtils.hasText((String)params.get("continent")) ? CONTINENT_WHERE_CLAUSE : "")
 				+ (StringUtils.hasText((String)params.get("region")) ? REGION_WHERE_CLAUSE : ""),
 				params, Integer.class);

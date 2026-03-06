@@ -15,8 +15,8 @@ import com.raj.worldgdp.model.CountryGDP;
 
 @Service
 public class WorldBankApiClient {
-	String GDP_URL = "http://api.worldbank.org/v2/countries/%s/indicators/SP.POP.TOTL?"
-			+ "format=json&date=2015:2025";
+	String GDP_URL = "https://api.worldbank.org/v2/countries/%s/indicators/NY.GDP.MKTP.CD?"
+			+ "format=json&date=2015:2024";
 
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final ObjectMapper mapper = new ObjectMapper();
@@ -37,7 +37,7 @@ public class WorldBankApiClient {
 				countryGDP.setValue(node.get("value").asDouble());
 			}
 
-			countryGDP.setYear(Short.valueOf(node.get("data").asText()));
+			countryGDP.setYear(Short.valueOf(node.get("date").asText()));
 			data.add(countryGDP);
 		}
 

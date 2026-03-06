@@ -6,7 +6,7 @@ import lombok.Data;
 public class CountryLanguage {
 	private Country country;
 	private String countryCode;
-	private String Language;
+	private String language;
 	private String isOfficial;
 	private Double percentage;
 

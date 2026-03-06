@@ -1,0 +1,110 @@
+		
+		<!doctype html>
+		<html lang="en" xmlns:th="http://www.thymeleaf.org"
+			th:replace="~{base :: layout(~{::section})}">
+		
+		<section class="container">
+		
+			<form class="row g-3 my-2" th:action="@{/countries}" method="get">
+		
+				<!---------- Search Input Box --------->
+				<div class="col-md-4">
+					<input class="form-control me-2" type="search" name="search"
+						th:value="${param.search}" placeholder="Search By Country Name"
+						aria-label="Search">
+				</div>
+		
+				<!---------- Continents --------->
+				<div class="col-md-3">
+					<select class="form-select" name="continent">
+						<option value="">All Continents</option>
+						<option th:each="c : ${continents}" th:value="${c}" th:text="${c}"
+							th:selected="${param.continent != null and param.continent[0] == c}"></option>
+		
+					</select>
+				</div>
+		
+				<!---------- Regions --------->
+				<div class="col-md-3">
+					<select class="form-select" name="region">
+						<option value="">All Regions</option>
+						<option th:each="r: ${regions}" th:value="${r}" th:text="${r}"
+							th:selected="${param.region != null and param.region[0] == r}"></option>
+					</select>
+				</div>
+		
+				<!---------- Search Button --------->
+				<div class="col-md-2">
+					<button class="btn btn-primary w-100" type="submit">Search</button>
+				</div>
+		
+			</form>
+		
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Sr. No</th>
+						<th scope="col">Code</th>
+						<th scope="col">Name</th>
+						<th scope="col">Continent</th>
+						<th scope="col">Region</th>
+						<th scope="col">Area</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="country, state: ${countries}">
+						<th th:text="${(pageNo-1) * 20 + state.index + 1}">Sr. No</th>
+						<th scope="row" th:text="${country.code}">Code</th>
+						<td><a th:text="${country.name}" class="text-decoration-none"
+							th:href="@{/countries/{code}(code=${country.code})}">Name</a></td>
+						<td th:text="${country.continent}">Continent</td>
+						<td th:text="${country.region}">Region</td>
+						<td th:text="${country.surfaceArea}">Area</td>
+					</tr>
+				</tbody>
+			</table>
+		
+			<nav aria-label="Page navigation"
+				th:with="navPages = ${T(java.lang.Math).ceil(count/20.0).intValue()}">
+				<ul class="pagination justify-content-center">
+		
+					<!-- -Previous Button -->
+		
+					<li th:classappend="${pageNo == 1} ? 'disabled' " class="page-item">
+						<a
+						th:href="@{/countries(
+						pageNo=${pageNo - 1},
+						search=${param.search},
+						continent=${param.continent},
+						region=${param.region}
+						)}"
+						class="page-link" tabindex="-1">Previous</a>
+					</li>
+		
+					<!-- -Numbers Button -->
+		
+					<li class="page-item"
+						th:each="page : ${#numbers.sequence(1, navPages)}"
+						th:classappend="${page == pageNo} ? 'active' "><a
+						th:href="@{/countries(pageNo=${page},
+						search=${param.search},
+						continent=${param.continent},
+						region=${param.region})}"
+						class="page-link" tabindex="-1" th:text="${page}">Pages</a></li>
+		
+		
+					<!-- -Next Button -->
+		
+					<li class="page-item"
+						th:classappend="${pageNo == navPages} ? 'disabled' "><a
+						class="page-link"
+						th:href="@{/countries(pageNo=${pageNo + 1},
+						search=${param.search},
+						continent=${param.continent},
+						region=${param.region})}">Next</a>
+					</li>
+				</ul>
+			</nav>
+		</section>
+		
+		</html>

@@ -20,7 +20,7 @@ public class CountryLanguageDao {
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	private static final Integer PAGE_SIZE = 10;
+	private static final Integer PAGE_SIZE = 5;
 
 	public List<CountryLanguage> getCountryLanguage(String countryCode, Integer pageNo){
 		Map<String, Object> params = new HashMap<>();

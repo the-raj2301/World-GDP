@@ -24,13 +24,13 @@ public class CityDao {
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	private static final Integer PAGE_SIZE = 10;
+	private static final Integer PAGE_SIZE = 5;
 
 	public List<City> getCities(String coutryCode,  Integer pageNo){
 		Map<String, Object> params = new HashMap<>();
 		params.put("code", coutryCode);
 
-		Integer offset = (pageNo != null) ? (pageNo - 1) * PAGE_SIZE : 0;
+		Integer offset = (pageNo != null) ? (pageNo - 1) * PAGE_SIZE : 1;
 		params.put("offset", offset);
 		params.put("size", PAGE_SIZE);
 
@@ -75,11 +75,11 @@ public class CityDao {
 		return keyHolder.getKey().longValue();
 	}
 
-	public void deleteCity(Long id) {
+	public int deleteCity(Long id) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("id", id);
 
-		namedParameterJdbcTemplate.update("DELETE FROM CITY WHERE id = :id", params);
+		return namedParameterJdbcTemplate.update("DELETE FROM CITY WHERE id = :id", params);
 	}
 
 }
