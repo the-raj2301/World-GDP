@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/city")
+@RequestMapping("/api/city")
 public class CityApiController {
 
 	@Autowired
@@ -51,6 +51,7 @@ public class CityApiController {
 	@PostMapping("/{countryCode}/cities")
 	public ResponseEntity<?> addCity(@PathVariable(name = "countryCode") String countryCode, @RequestBody City city) {
 		try {
+			Thread.sleep(500);
 			Long addedCityId = cityDao.addCity(countryCode, city);
 			City cityDetails = cityDao.getCityDetails(addedCityId);
 			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(addedCityId)
@@ -73,10 +74,25 @@ public class CityApiController {
 			System.out.println("Deleted");
 			return ResponseEntity.noContent().build();
 		} catch (Exception e) {
+			System.out.println("Something went wrong catch block initiated");
 			log.error("Error occured with city id: {}", cityId, e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("An Error Occurred While Deleting the city by id: " + cityId);
 		}
 	}
+	
+	@GetMapping("/{countryCode}/search")
+	public List<City> searchCities(@PathVariable(name = "countryCode") String countryCode, @RequestParam(name = "query") String query) {
+		System.out.println("Fetching cities");
+		List<City> cities = cityDao.searchCities(countryCode, query);
+		System.out.println("Cities : "+ cities);
+		return cities;
+	}
 
 }
+
+
+
+
+
+

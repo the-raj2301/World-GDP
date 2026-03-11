@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base :: layout(~{::section})}">
+
+<section class="container">
+
+	<h1 class="display-6 fw-bolder mt-4"
+		th:text="|Editing - ${country.name} ( ${country.code} / ${country.code2} )|"></h1>
+
+	<form class="row g-3 my-3" th:object="${country}"
+		th:action="@{/countries/{code}(code=${country.code})}"
+		th:method="POST">
+
+		<!-- Row 1 -->
+		<div class="col-md-4 py-2">
+			<label class="form-label" for="name">Name</label> <input type="text"
+				th:field="*{name}" class="form-control" id="name"
+				placeholder="Enter Country Name">
+		</div>
+
+		<div class="col-md-4 py-2">
+			<label class="form-label" for="localName">Local Name</label> <input
+				th:field="*{localName}" type="text" class="form-control"
+				id="localName" placeholder="Enter Local Name">
+		</div>
+
+		<div class="col-md-4 py-2">
+			<label class="form-label" for="capitalName">Capital</label> <input
+				type="text" class="form-control" id="capitalName"
+				name="capital.name"
+				th:value="${country.capital != null ? country.capital.name : '' }"
+				autocomplete="off" placeholder="Enter Capital">
+				
+				<ul id="capitalSuggetions" class="list-group position-absolute d-none" style="z-index:1000;"></ul>
+				
+				<input type="hidden" id="capitalId" name="capital.id" th:value="${country.capital != null ? country.capital.id : '' }">
+		</div>
+
+		<!-- Row 2 -->
+
+		<div class="col-md-6 py-2">
+			<label class="form-label" for="continent">Continent</label> <select
+				class="form-select" name="continent" id="continent"
+				th:field="*{continent}">
+				<option value="" disabled>Select Continents</option>
+				<option th:each="c: ${continents}" th:value="${c}" th:text="${c}"
+					th:selected="${c == country.continent}"></option>
+			</select>
+		</div>
+		<div class="col-md-6 py-2">
+			<label class="form-label" for="region">Regions</label> <select
+				class="form-select" name="region" id="region" th:field="*{region}">
+				<option value="" disabled>Select Regions</option>
+				<option th:each="r: ${regions}" th:value="${r}" th:text="${r}"
+					th:selected="${r == country.region}"></option>
+			</select>
+		</div>
+
+		<!-- Row 3 -->
+		<div class="col-md-6 py-2">
+			<label class="form-label" for="headOfState">Head Of State</label> <input
+				th:field="*{headOfState}" type="text" class="form-control"
+				id="headOfState" placeholder="Enter Head Of State">
+		</div>
+
+		<div class="col-md-6 py-2">
+			<label class="form-label" for="government">Government</label> <input
+				th:field="*{governmentForm}" type="text" class="form-control"
+				id="government" placeholder="Enter Government">
+		</div>
+
+		<!-- Row 4 -->
+		<div class="col-md-6 py-2">
+			<label class="form-label" for="independence">Independence
+				Year</label> <input type="number" class="form-control" id="independence"
+				th:field="*{indepYear}" placeholder="Year">
+		</div>
+
+		<div class="col-md-6 py-2">
+			<label class="form-label" for="surfaceArea">Surface Area</label> <input
+				th:field="*{surfaceArea}" type="number" class="form-control"
+				id="surfaceArea" placeholder="Area">
+		</div>
+		<!-- Row 5 -->
+		<div class="col-md-6 py-2">
+			<label class="form-label" for="population">Population</label> <input
+				th:field="*{population}" type="number" class="form-control"
+				id="population" placeholder="Population">
+		</div>
+
+		<div class="col-md-6 py-2">
+			<label class="form-label" for="lifeExpectancy">Life
+				Expectancy</label> <input type="number" class="form-control"
+				th:field="*{lifeExpectancy}" id="lifeExpectancy"
+				placeholder="Life Expectancy">
+		</div>
+
+		<!-- Buttons -->
+		<div class="col-12 d-flex justify-content-center gap-3 mt-3 py-2">
+			<a th:href="@{/countries/{code}(code=${country.code})}"
+				class="btn btn-secondary">Cancel</a>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</div>
+
+	</form>
+
+</section>
+
+</html>

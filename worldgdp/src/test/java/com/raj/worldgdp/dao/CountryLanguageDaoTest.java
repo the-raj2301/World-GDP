@@ -36,7 +36,7 @@ class CountryLanguageDaoTest {
 
 	@Test
 	public void testGetCountryLanguage() {
-		List<CountryLanguage> countryLanguage = countryLanguageDao.getCountryLanguage("IND", 1);
+		List<CountryLanguage> countryLanguage = countryLanguageDao.getCountryLanguage("IND");
 		assertThat(countryLanguage).hasSize(10);
 	}
 

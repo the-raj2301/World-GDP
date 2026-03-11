@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<th:block th:fragment="cityItems">
+		<div class="cityFragment" th:data-hasmore="${hasMore}">
+
+			<li th:each="city: ${cities}" class="list-group-item">
+				<p class="mb-1 fs-5 fw-bold" th:text="${city.name}">City</p>
+				<div class="d-flex justify-content-between align-items-center">
+					<div class="d-flex gap-3">
+						<small class="text-muted" th:text="${city.district}">District</small>
+						<small class="text-muted">/</small> <small class="text-muted"
+							th:text="${city.population}">Population</small>
+					</div>
+					<a th:data-id="${city.id}" class="mb-2 btn btn-sm btn-outline-danger deleteCityBtn" title="Delete City">
+						<i class="bi bi-trash3"></i>
+					</a>
+				</div>
+			</li>
+
+		</div>
+	</th:block>
+</body>
+</html>

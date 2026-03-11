@@ -1,5 +1,6 @@
 package com.raj.worldgdp.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,9 @@ public class CityDao {
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	private static final Integer PAGE_SIZE = 5;
+	private static final Integer PAGE_SIZE = 20;
 
-	public List<City> getCities(String coutryCode,  Integer pageNo){
+	public List<City> getCities(String coutryCode, Integer pageNo) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("code", coutryCode);
 
@@ -35,15 +36,12 @@ public class CityDao {
 		params.put("size", PAGE_SIZE);
 
 		return namedParameterJdbcTemplate.query(
-				"SELECT "
-				+ " id, name, countryCode country_code, district, population from city "
-				+ " WHERE countryCode = :code "
-				+ " ORDER BY POPULATION DESC "
-				+ ((pageNo != null) ? " LIMIT :size OFFSET :offset " : "")
-				, params, new CityRowMapper());
+				"SELECT " + " id, name, countryCode country_code, district, population from city "
+						+ " WHERE countryCode = :code " + " ORDER BY POPULATION DESC " + " LIMIT :size OFFSET :offset ",
+				params, new CityRowMapper());
 	}
 
-	public List<City> getCities(String country){
+	public List<City> getCities(String country) {
 		return getCities(country, null);
 	}
 
@@ -51,9 +49,8 @@ public class CityDao {
 		Map<String, Object> params = new HashMap<>();
 		params.put("id", id);
 		return namedParameterJdbcTemplate.queryForObject(
-				" SELECT id, name, countryCode AS country_code, district, population "
-				+ " FROM city WHERE id = :id"
-				, params, new CityRowMapper());
+				" SELECT id, name, countryCode AS country_code, district, population " + " FROM city WHERE id = :id",
+				params, new CityRowMapper());
 	}
 
 	public Long addCity(String countryCode, City city) {
@@ -69,8 +66,8 @@ public class CityDao {
 
 		namedParameterJdbcTemplate.update(
 				" INSERT INTO city (name, countryCode, district, population)"
-				+ " VALUES (:name, :country_code, :district, :population) "
-				, sqlParameterSource, keyHolder, new String[] {"id"});
+						+ " VALUES (:name, :country_code, :district, :population) ",
+				sqlParameterSource, keyHolder, new String[] { "id" });
 
 		return keyHolder.getKey().longValue();
 	}
@@ -80,6 +77,18 @@ public class CityDao {
 		params.put("id", id);
 
 		return namedParameterJdbcTemplate.update("DELETE FROM CITY WHERE id = :id", params);
+	}
+
+	public List<City> searchCities(String countryCode, String query) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("code", countryCode);
+		params.put("query", query);
+
+		return namedParameterJdbcTemplate.query("SELECT " + " ID, countryCode country_code, Name, District, Population from city "
+				+ " WHERE CountryCode = :code " 
+				+ " AND LOWER(Name) LIKE CONCAT('%', LOWER(:query), '%') "
+				+ " ORDER BY Name LIMIT 10 ", params, new CityRowMapper());
+
 	}
 
 }

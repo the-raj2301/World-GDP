@@ -13,6 +13,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.raj.worldgdp.model.CountryGDP;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class WorldBankApiClient {
 	String GDP_URL = "https://api.worldbank.org/v2/countries/%s/indicators/NY.GDP.MKTP.CD?"
@@ -21,24 +24,30 @@ public class WorldBankApiClient {
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final ObjectMapper mapper = new ObjectMapper();
 
-	public List<CountryGDP> getGDP(String countryCode) throws JsonMappingException, JsonProcessingException {
-
-		ResponseEntity<String> response = restTemplate.getForEntity(String.format(GDP_URL, countryCode), String.class);
-
-		JsonNode tree = mapper.readTree(response.getBody()).get(1);
-
+	public List<CountryGDP> getGDP(String countryCode) {
+		
 		List<CountryGDP> data = new ArrayList<>();
 
-		for (JsonNode node : tree) {
+		try {
+			ResponseEntity<String> response = restTemplate.getForEntity(String.format(GDP_URL, countryCode),
+					String.class);
 
-			CountryGDP countryGDP = new CountryGDP();
+			JsonNode tree = mapper.readTree(response.getBody()).get(1);
 
-			if (!node.get("value").isNull()) {
-				countryGDP.setValue(node.get("value").asDouble());
+			for (JsonNode node : tree) {
+
+				CountryGDP countryGDP = new CountryGDP();
+
+				if (!node.get("value").isNull()) {
+					countryGDP.setValue(node.get("value").asDouble());
+				}
+
+				countryGDP.setYear(Short.valueOf(node.get("date").asText()));
+				data.add(countryGDP);
 			}
 
-			countryGDP.setYear(Short.valueOf(node.get("date").asText()));
-			data.add(countryGDP);
+		} catch (Exception e) {
+			log.error("Something went wrong! " + e);
 		}
 
 		return data;

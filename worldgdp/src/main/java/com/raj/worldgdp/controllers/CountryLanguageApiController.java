@@ -28,10 +28,9 @@ public class CountryLanguageApiController {
 	CountryLanguageDao languageDao;
 
 	@GetMapping("/{countryCode}")
-	public ResponseEntity<?> getLanguage(@PathVariable(name = "countryCode") String countryCode,
-			@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
+	public ResponseEntity<?> getLanguage(@PathVariable(name = "countryCode") String countryCode) {
 		try {
-			List<CountryLanguage> languages = languageDao.getCountryLanguage(countryCode, pageNo);
+			List<CountryLanguage> languages = languageDao.getCountryLanguage(countryCode);
 			if (languages.isEmpty()) {
 				return ResponseEntity.notFound().build();
 			}

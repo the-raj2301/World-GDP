@@ -20,19 +20,19 @@ public class CountryLanguageDao {
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	private static final Integer PAGE_SIZE = 5;
+//	private static final Integer PAGE_SIZE = 20;
 
-	public List<CountryLanguage> getCountryLanguage(String countryCode, Integer pageNo){
+	public List<CountryLanguage> getCountryLanguage(String countryCode){
 		Map<String, Object> params = new HashMap<>();
 		params.put("code", countryCode);
-		Integer offset = (pageNo - 1) * PAGE_SIZE;
-		params.put("offset", offset);
-		params.put("size", PAGE_SIZE);
+//		Integer offset = (pageNo - 1) * PAGE_SIZE;
+//		params.put("offset", offset);
+//		params.put("size", PAGE_SIZE);
 		return namedParameterJdbcTemplate.query(
 				"SELECT * from countrylanguage "
 				+ " WHERE countrycode = :code "
 				+ " ORDER BY percentage DESC "
-				+ " LIMIT :size OFFSET :offset "
+//				+ " LIMIT :size OFFSET :offset "
 				, params, new CountryLanguageRowMapper());
 	}
 
