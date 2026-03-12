@@ -3,15 +3,11 @@ document.addEventListener("DOMContentLoaded", () => {
 	const suggetionList = document.getElementById("capitalSuggetions");
 	const capitalIdInput = document.getElementById("capitalId");
 
-	console.log("loaded");
-
 	let debounceTimer;
 
 	if(capitalInput){
 	capitalInput.addEventListener("input", function() {
 		const query = this.value.trim();
-
-		console.log("Input event");
 
 		if (query.length < 3) {
 			suggetionList.classList.add("d-none");

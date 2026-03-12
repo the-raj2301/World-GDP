@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import com.raj.worldgdp.model.City;
 @Transactional
 @ExtendWith(SpringExtension.class)
 @SpringJUnitConfig(classes = TestDBConfiguration.class)
+@ActiveProfiles("test")
 class CityDaoTest {
 
 	@Autowired
@@ -39,7 +41,7 @@ class CityDaoTest {
 	@Test
 	public void testGetCities() {
 		List<City> cities = cityDao.getCities("IND", 1);
-		assertThat(cities).hasSize(10);
+		assertThat(cities).hasSize(20);
 	}
 
 	@Test

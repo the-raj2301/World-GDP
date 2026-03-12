@@ -13,9 +13,10 @@
 		<mysql.version>9.6.0</mysql.version>
 		<spring.version>6.1.6</spring.version>
 		<hikari.version>7.0.2</hikari.version>
-		<junit.version>6.0.1</junit.version>
+		<junit.version>5.14.2</junit.version>
 		<h2.version>2.3.232</h2.version>
 		<assert.version>3.27.7</assert.version>
+		<logback.version>1.5.32</logback.version>
 		<thymeleaf.version>3.1.3.RELEASE</thymeleaf.version>
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
@@ -62,6 +63,13 @@
 			<artifactId>assertj-core</artifactId>
 			<version>${assert.version}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<dependency>

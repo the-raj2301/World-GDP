@@ -8,17 +8,15 @@ document.addEventListener("DOMContentLoaded", () => {
 	const saveBtn = document.getElementById("saveCityBtn");
 	const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
 	const addCityBtn = document.getElementById("addCityBtn");
-	
+
 	/* ---------- DELETE MODAL ACCESSIBILITY ---------- */
 
 	document.querySelectorAll(".modal").forEach(modal => {
-
-	    modal.addEventListener("hide.bs.modal", () => {
-	        document.activeElement.blur();
-	    });
-
+		modal.addEventListener("hide.bs.modal", () => {
+			document.activeElement.blur();
+		});
 	});
-	
+
 	if (deleteModalEl) {
 
 		deleteModalEl.addEventListener("hidden.bs.modal", () => {
@@ -28,45 +26,35 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	}
 
-	/* ---------- ADD CITY ---------- */
+	/* ---------- Aadd City Button Clicked ---------- */
 
-	if (saveBtn) {
-		saveBtn.addEventListener("click", addCity);
-	}
+		saveBtn?.addEventListener("click", addCity);
 
-	/* ---------- DELETE BUTTON CLICK ---------- */
+	/* ---------- Delete Button Clicked ---------- */
 
 	document.addEventListener("click", (e) => {
-
+		
 		const btn = e.target.closest(".deleteCityBtn");
 		if (!btn) return;
 
 		cityId = btn.dataset.id;
 		deleteBtn = btn;
 
-		if (deleteModalEl) {
-			new bootstrap.Modal(deleteModalEl).show();
-		}
-
+		new bootstrap.Modal(deleteModalEl).show();
 	});
 
-	/* ---------- CONFIRM DELETE ---------- */
+	/* ---------- Confirm Delete Button Clicked ---------- */
 
-	if (confirmDeleteBtn) {
-		confirmDeleteBtn.addEventListener("click", () => {
+		confirmDeleteBtn?.addEventListener("click", () => {
 			if (!cityId) return;
 			deleteCity(cityId, deleteBtn);
 		});
-	}
 
-	/* ---------- RESET ADD FORM ---------- */
+	/* ---------- Reseting the add city form ---------- */
 
-	if (addModalEl) {
-		addModalEl.addEventListener("hidden.bs.modal", () => {
+		addModalEl?.addEventListener("hidden.bs.modal", () => {
 			document.getElementById("cityForm")?.reset();
 		});
-	}
-
 });
 
 
@@ -81,7 +69,7 @@ function addCity() {
 		district: document.getElementById("district")?.value,
 		population: document.getElementById("population")?.value
 	};
-
+	
 	fetch(`/worldgdp/api/city/${countryCode}/cities`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
@@ -90,9 +78,8 @@ function addCity() {
 		.then(r => r.json())
 		.then(city => {
 
+			showToast("City added successfully", "success");
 			appendCityToList(city);
-
-			showToast("City added successfully");
 
 			bootstrap.Modal
 				.getInstance(document.getElementById("addCityModal"))
@@ -103,7 +90,7 @@ function addCity() {
 		})
 		.catch(err => {
 			console.error(err);
-			showToast("Error: Can't add city");
+			showToast("Error: Can't add city", "error");
 		})
 		.finally(() => toggleAddCitySpinner(false));
 }
@@ -152,65 +139,54 @@ function appendCityToList(city) {
 function deleteCity(cityId, btn) {
 
 	fetch(`/worldgdp/api/city/${cityId}`, { method: "DELETE" })
-
 		.then(response => {
-
 			bootstrap.Modal
 				.getInstance(document.getElementById("deleteCityModal"))
 				?.hide();
-
-			if (response.ok) {
-
-				btn.closest("li")?.remove();
-
-				showToast("City deleted");
-
-			} else {
-
-				showToast("Failed to delete city");
-
+			if (!response.ok) {
+				showToast("Failed to delete city", "warning");
+				return;
 			}
-
+			showToast("City deleted", "warning");
+			btn.closest("li")?.remove();
 		})
-
 		.catch(err => {
-
 			console.error(err);
-
-			showToast("Internal server error");
-
+			showToast("Internal server error", "error");
 		});
-
 }
 
-
-/* ---------- SPINNER ---------- */
+/* ---------- Spinner ---------- */
 
 function toggleAddCitySpinner(isLoading) {
-
 	const btn = document.getElementById("saveCityBtn");
 	const spinner = document.getElementById("saveCitySpinner");
 
 	if (!btn || !spinner) return;
-
 	btn.disabled = isLoading;
-
 	spinner.classList.toggle("d-none", !isLoading);
 
 }
 
+/* ---------- Global Toast ---------- */
 
-/* ---------- TOAST ---------- */
+function showToast(message, type) {
+	const toast = document.getElementById("addToast");
 
-function showToast(message) {
+	if (!toast) return;
 
-	const toast = document.getElementById("cityToast");
-	const body = toast?.querySelector(".toast-body");
-
-	if (!toast || !body) return;
-
+	const body = toast.querySelector(".toast-body");
 	body.textContent = message;
+	toast.classList.remove("bg-success", "bg-error", "bg-info", "bg-warning", "bg-danger");
 
-	new bootstrap.Toast(toast).show();
+	const typeMap = {
+		success: "bg-success", error: "bg-danger", warning: "bg-warning"
+	}
+
+	toast.classList.add(typeMap[type] || "bg-info")
+
+	new bootstrap.Toast(toast, {
+		delay: 3000
+	}).show();
 
 }

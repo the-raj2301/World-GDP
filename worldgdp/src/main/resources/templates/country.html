@@ -112,6 +112,7 @@
 					id="addCityBtn" data-bs-toggle="modal"
 					data-bs-target="#addCityModal">+ New City</a>
 			</div>
+			
 			<!--------------- Add City Modal -------------->
 
 			<div class="modal fade" id="addCityModal" tabindex="-1"
@@ -126,9 +127,10 @@
 								aria-label="Close"></button>
 						</div>
 						<form class="modal-body" id="cityForm">
-							<label for="cityName" class="col-form-label">City Name</label> <input
-								class="form-control" type="text" id="cityName"
-								placeholder="Enter City Name"> <label for="district"
+							<label for="cityName" class="col-form-label">City Name</label> 
+							<input class="form-control" type="text" id="cityName"
+								placeholder="Enter City Name"> 
+							<label for="district"
 								class="col-form-label">District</label> <input
 								class="form-control" type="text" id="district"
 								placeholder="Enter District Name"> <label
@@ -136,7 +138,7 @@
 								class="form-control" type="number" id="population"
 								placeholder="Enter Total Population">
 						</form>
-						<div class="modal-footer">
+						<div class="modal-footer justify-content-center">
 							<button type="button" class="btn btn-secondary"
 								data-bs-dismiss="modal">Cancel</button>
 							<button type="button" class="btn btn-primary" id="saveCityBtn">
@@ -161,7 +163,7 @@
 							<div class="d-flex gap-3">
 								<small class="text-muted" th:text="${city.district}">District</small>
 								<small class="text-muted">/</small> <small class="text-muted"
-									th:text="${city.population}">Population</small>
+									title="Population" th:text="${city.population}">Population</small>
 							</div>
 
 							<!-- Delete City Button -->
@@ -191,10 +193,10 @@
 		<div class="col-md-3">
 			<div class="d-flex justify-content-between py-2">
 				<div class="fw-bold fs-5">Languages</div>
-				<a class="btn btn-sm btn-success" href="#" role="button">+ New</a>
+				<a class="btn btn-sm btn-success" id="addLanguageBtn" data-bs-toggle="modal" data-bs-target="#languageModal">+ New</a>
 			</div>
 			<div class="city-container">
-				<ol class="list-group">
+				<ol class="list-group" id="languageList">
 					<li th:each="language: ${languages}" class="list-group-item">
 						<p class="mb-1 fs-5 fw-bold" th:text="${language.language}">Language</p>
 						<div class="d-flex justify-content-between align-items-center">
@@ -204,9 +206,9 @@
 									style="width: 12px; height: 12px; display: inline-block;">
 								</span>
 								</small> <small class="text-muted">/</small> <small class="text-muted"
-									th:text="${language.percentage}">Percentage</small>
+									th:text="|${language.percentage}%|">Percentage</small>
 							</div>
-							<a class="mb-2 btn btn-sm btn-outline-danger"
+							<a th:data-name="${language.language}" class="mb-2 btn btn-sm btn-outline-danger deleteLangBtn"
 								title="Delete Language"><i class="bi bi-trash3"></i></a>
 						</div>
 					</li>
@@ -219,7 +221,34 @@
 				<button class="btn btn-sm btn-outline-secondary">Load More</button>
 			</div>
 		</div>
-
+		
+		<!-- New Language Modal -->
+		
+		<div class="modal fade" id="languageModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5">Add Language</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<form class="modal-body" id="languageForm">
+						<label for="language" class="col-form-label">Language</label>
+						<input id="language" class="form-control" type="text" placeholder="Enter language">
+						<label for="percentage" class="col-form-label">Percentage</label>
+						<input id="percentage" class="form-control" type="number" placeholder="Enter percentage">
+						<div class="form-check py-3">
+						  <input class="form-check-input" type="checkbox" value="T" id="isOfficial">
+						  <label class="form-check-label" for="isOfficial">The Language is Official</label>
+						</div>
+					</form>
+					<div class="modal-footer justify-content-center">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="button" id="saveLanguageBtn" class="btn btn-primary">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 		<!--------------- GDP Info -------------->
 		<div class="col-md-6">
 			<div class="d-flex py-2 ms-5">
@@ -245,7 +274,7 @@
 
 	<div class="position-fixed top-0 py-4 start-50 translate-middle-x"
 		style="z-index: 1100;">
-		<div id="cityToast"
+		<div id="addToast"
 			class="toast align-items-center text-white bg-primary border-0"
 			role="alert" aria-live="assertive" aria-atomic="true">
 			<div class="d-flex">
@@ -274,6 +303,31 @@
 						Cancel</button>
 
 					<button class="btn btn-danger" id="confirmDeleteBtn">
+						Delete</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	
+	<!-- Delete Language Confirmation Modal -->
+	<div class="modal fade" id="deleteLangModal" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h5 class="modal-title">Delete Language</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+
+				<div class="modal-body">Are you sure you want to delete this
+					Language?</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-bs-dismiss="modal">
+						Cancel</button>
+
+					<button class="btn btn-danger" id="confirmDeleteLangBtn">
 						Delete</button>
 				</div>
 
